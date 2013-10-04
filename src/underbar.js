@@ -105,6 +105,21 @@ var _ = { };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
+    var seen = [];
+
+    _.each(array, function(value) {
+      var duplicate = false;
+      _.each(seen, function(existing) {
+        if (value === existing) {
+          duplicate = true;
+        }
+      })
+      if (duplicate === false) {
+        seen.push(value);
+      }
+    })
+
+    return seen;
   };
 
 
