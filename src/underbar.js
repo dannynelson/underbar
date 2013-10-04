@@ -22,10 +22,7 @@ var _ = { };
       return [];
     } else {
       var array2 = [];
-      for (var i = 0; i < n; i++) {
-        if (i > (array.length - 1)) {
-          break;
-        }
+      for (var i = 0; i < n && i < array.length; i++) {
         array2.push(array[i]);
       } 
       return array2;
@@ -35,6 +32,18 @@ var _ = { };
   // Like first, but for the last elements. If n is undefined, return just the
   // last element.
   _.last = function(array, n) {
+    var last = array.length - 1
+    if (n == undefined) {
+      return array[last]
+    } else if (n == 0) {
+      return [];
+    } else {
+      var array2 = [];
+      for (var i = last; i > (last - n) && i >= 0; i--) {
+        array2.push(array[i]);
+      }
+      return array2.sort();
+    }
   };
 
   // Call iterator(value, key, collection) for each element of collection.
