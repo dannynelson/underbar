@@ -67,7 +67,7 @@ var _ = { };
     // implemented for you. Instead of using a standard `for` loop, though,
     // it uses the iteration helper `each`, which you will need to write.
     var indexes = [];
-    _.each(array, function(value, key, collection) {
+    _.each(array, function(value, key) {
       if (value == target) {
         indexes.push(key); //is it possible to stop an each iteration??
       }
@@ -81,6 +81,13 @@ var _ = { };
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, iterator) {
+    var matches = [];
+    _.each(collection, function(value) {
+      if (iterator(value) == true) {
+        matches.push(value);
+      }
+    })
+    return matches;
   };
 
   // Return all elements of an array that don't pass a truth test.
