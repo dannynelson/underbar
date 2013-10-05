@@ -191,6 +191,7 @@ var _ = { };
   _.contains = function(collection, target) {
     // TIP: Many iteration problems can be most easily expressed in
     // terms of reduce(). Here's a freebie to demonstrate!
+    // was found is "total", it changes to true once the item is found and breaks out of the function, starts as false
     return _.reduce(collection, function(wasFound, item) {
       if(wasFound) {
         return true;
@@ -203,6 +204,14 @@ var _ = { };
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    var iteratorExists = (arguments[1] !== undefined)
+    return _.reduce(collection, function(match, item) {
+      if(match === false) {
+        return false; //if false, continues returning false until finished looping
+      }
+      return ( iteratorExists ? (iterator(item) == true) : item )
+      //tests if it passes a truth test (including 1)
+    }, true) //true by default
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
