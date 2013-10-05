@@ -154,10 +154,13 @@ var _ = { };
 
   // Calls the method named by methodName on each value in the list.
   _.invoke = function(list, methodName, args) {
+    //test if it is a function
     return _.map(list, function(value) {
       //need bracket syntax b/c methodName is a string
+      //[(any Array)]["sort"].call([3,2,1]) is equivalent to [3,2,1].sort()
       //call takes arg list, while apply takes arg array
-      return value[methodName].call(value, args); //remember to return!
+      //must use object 
+      return (typeof(methodName) === "function" ? methodName : value[methodName]).call(value, args);
     })
   };
 
