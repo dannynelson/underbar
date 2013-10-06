@@ -238,7 +238,6 @@ var _ = { };
         return true; //if false, continues returning false until finished looping
       }
       return ( iteratorExists ? (!!(iterator(item)) == true) : !!item )
-      //tests if it passes a truth test (including 1)
     }, false) 
   };
 
@@ -262,6 +261,15 @@ var _ = { };
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    var objects =  Array.prototype.slice.call(arguments, 1); //get all added objects
+    //can't use slice directly on arguments
+    //http://stackoverflow.com/questions/7056925/how-does-array-prototype-slice-call-work
+    _.each(objects, function(object) { //select each obj
+      _.each(object, function(value, prop) { //select props/values from that obj
+        obj[prop] = value;
+      })
+    })
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
