@@ -209,7 +209,7 @@ var _ = { };
       if(match === false) {
         return false; //if false, continues returning false until finished looping
       }
-      return ( iteratorExists ? (iterator(item) == true) : item )
+      return ( iteratorExists ? !!(iterator(item) == true) : !!item )
       //tests if it passes a truth test (including 1)
     }, true) //true by default
   };
@@ -218,6 +218,28 @@ var _ = { };
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    // start value is false, searching for true. Only thing I can borrow is the truth test
+
+    // if (arguments[1] === undefined) {
+    //   iterator = function(item) { return item; };
+    // }
+    // var match = false;
+    // return _.each(collection, function(value) {
+    //   if (_.every(value, iterator) === true) {
+    //     match = true;
+    //   }
+    // })
+    // return match;
+
+    //with reduce
+    var iteratorExists = (arguments[1] !== undefined)
+    return _.reduce(collection, function(match, item) {
+      if(match === true) {
+        return true; //if false, continues returning false until finished looping
+      }
+      return ( iteratorExists ? (!!(iterator(item)) == true) : !!item )
+      //tests if it passes a truth test (including 1)
+    }, false) 
   };
 
 
