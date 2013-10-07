@@ -263,6 +263,7 @@ var _ = { };
   _.extend = function(obj) {
     var objects =  Array.prototype.slice.call(arguments, 1); //get all added objects
     //can't use slice directly on arguments
+    //it is not an array, it is an array-like object
     //http://stackoverflow.com/questions/7056925/how-does-array-prototype-slice-call-work
     _.each(objects, function(object) { //select each obj
       _.each(object, function(value, prop) { //select props/values from that obj
@@ -323,6 +324,12 @@ var _ = { };
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    //for recursive functions
+    //stores the recursive values as they are calculated??
+    // var results = {};
+    // return function() {
+    //   var key = 
+    // }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -332,6 +339,9 @@ var _ = { };
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var args = Array.prototype.slice.call(arguments, 2);
+    // why does this work once it is wrapped in another function?? 
+    setTimeout(function() { return func.apply(null, args); }, wait);
   };
 
 
