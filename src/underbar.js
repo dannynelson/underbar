@@ -352,6 +352,21 @@ var _ = { };
 
   // Shuffle an array.
   _.shuffle = function(array) {
+    var randomized = {};
+    var keys = [];
+    var shuffledArray = [];
+
+    _.each(array, function(value) { //assign random number to each value
+      randomized[Math.random()] = value;
+    })
+    _.each(randomized, function(value, key) { //put keys in an array and sort
+      keys.push(key);
+    })
+    keys.sort();
+    _.each(keys, function(key) { //find the associated values
+      shuffledArray.push(randomized[key]);
+    })
+    return shuffledArray;
   };
 
 
