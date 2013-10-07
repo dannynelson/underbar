@@ -325,11 +325,17 @@ var _ = { };
   // instead if possible.
   _.memoize = function(func) {
     //for recursive functions
-    //stores the recursive values as they are calculated??
-    // var results = {};
-    // return function() {
-    //   var key = 
-    // }
+    //stores the recursive values as they are calculated
+    // http://my.safaribooksonline.com/book/programming/javascript/9780596517748/functions/memoization
+    var results = {}; // store results
+    //how do I retrieve the argument from func
+    return function() { 
+      var arg = Array.prototype.slice.call(arguments); //*but the function directly above does not have any arguments???
+      if (results[arg] === undefined) { //test if value has already been calculated
+        results[arg] = func(arg); //if not, calculated the value
+      }
+      return results[arg];
+    }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -341,6 +347,7 @@ var _ = { };
   _.delay = function(func, wait) {
     var args = Array.prototype.slice.call(arguments, 2);
     // why does this work once it is wrapped in another function?? 
+    // why null?
     setTimeout(function() { return func.apply(null, args); }, wait);
   };
 
