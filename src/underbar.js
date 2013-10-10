@@ -451,23 +451,34 @@ var _ = { };
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
   _.intersection = function() {
-    var arrays = arguments;
-    var seenValues = arrays[0];
-    _.each(arrays, function(array) {
-      // filter seenValues for just the items that match an array value
+    var seenValues = arguments[0];
+    var comparisonArrays = Array.prototype.slice.call(arguments, 1);
+    _.each(comparisonArrays, function(comparisonArray) {
+      // filter seenValues for just the items that match any comparisonArray value
       seenValues = _.filter(seenValues, function(seenValue) {
-        return _.some(array, function(value) {
-          return value === seenValue;
+        return _.some(comparisonArray, function(comparisonValue) {
+          return seenValue === comparisonValue;
         })
       })
     })
-    console.log(seenValues);
     return seenValues;
   };
 
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
   _.difference = function(array) {
+    var originalArray = arguments[0];
+    var comparisonArrays = Array.prototype.slice.call(arguments, 1);
+    _.each(comparisonArrays, function(comparisonArray) {
+      // filter originalArray for just the values that do not match in the comparison arrays
+      originalArray = _.filter(originalArray, function(originalValue) {
+        return _.every(comparisonArray, function(comparisonValue) {
+          return originalValue !== comparisonValue;
+        })
+      })
+    })
+    console.log(originalArray);
+    return originalArray;
   };
 
 
