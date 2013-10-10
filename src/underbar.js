@@ -388,6 +388,30 @@ var _ = { };
   // of that string. For example, _.sortBy(people, 'name') should sort
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
+    var sortedCollection = [];
+    var iteratorResults = [];
+    var resultHash = {};
+
+    //pair iteratorResults to each value in collection
+    _.each(collection, function(value) {
+      var result = (typeof(iterator) === "string" ? value[iterator] : iterator(value));
+      iteratorResults.push(result);
+      if (!resultHash[result]) resultHash[result] = [];
+      resultHash[result].push(value);
+    })
+
+    //sort the unique iteratorResults
+    iteratorResults = _.uniq(iteratorResults).sort(function(a,b){return a-b;});
+    
+    //return the associated properties of each iterator result
+    //manually because _.flatten hasn't been invented yet...
+    _.each(iteratorResults, function(result) {
+      _.each(resultHash[result], function(value) {
+        sortedCollection.push(value);
+      })
+    })
+
+    return sortedCollection;
   };
 
   // Zip together two or more arrays with elements of the same index
