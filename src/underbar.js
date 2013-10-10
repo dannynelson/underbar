@@ -451,6 +451,18 @@ var _ = { };
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
   _.intersection = function() {
+    var arrays = arguments;
+    var seenValues = arrays[0];
+    _.each(arrays, function(array) {
+      // filter seenValues for just the items that match an array value
+      seenValues = _.filter(seenValues, function(seenValue) {
+        return _.some(array, function(value) {
+          return value === seenValue;
+        })
+      })
+    })
+    console.log(seenValues);
+    return seenValues;
   };
 
   // Take the difference between one array and a number of other arrays.
