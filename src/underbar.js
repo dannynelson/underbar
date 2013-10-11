@@ -16,34 +16,24 @@ var _ = { };
   // Return an array of the first n elements of an array. If n is undefined,
   // return just the first element.
   _.first = function(array, n) {
-    if (n == undefined) {
-      return array[0];
-    } else if (n == 0) {
-      return [];
-    } else {
-      var array2 = [];
-      for (var i = 0; i < n && i < array.length; i++) {
-        array2.push(array[i]);
-      } 
-      return array2;
-    }
+    var result = [];
+    if (n === undefined) return array[0];
+    for (var i = 0; i < n && i < array.length; i++) {
+      result.push(array[i]);
+    } 
+    return result;
   };
 
   // Like first, but for the last elements. If n is undefined, return just the
   // last element.
   _.last = function(array, n) {
+    var result = [];
     var last = array.length - 1
-    if (n == undefined) {
-      return array[last]
-    } else if (n == 0) {
-      return [];
-    } else {
-      var array2 = [];
-      for (var i = last; i > (last - n) && i >= 0; i--) {
-        array2.push(array[i]);
-      }
-      return array2.sort();
+    if (n === undefined) return array[last];
+    for (var i = last; i > (last - n) && i >= 0; i--) {
+      result.push(array[i]);
     }
+    return result.reverse();
   };
 
   // Call iterator(value, key, collection) for each element of collection.
@@ -67,27 +57,25 @@ var _ = { };
     // implemented for you. Instead of using a standard `for` loop, though,
     // it uses the iteration helper `each`, which you will need to write.
     var indexes = [];
-    _.each(array, function(value, key) {
-      if (value == target) {
-        indexes.push(key); //is it possible to stop an each iteration??
-      }
+    _.each(array, function(value, index) {
+      if (value === target) indexes.push(index);
     })
-    if (indexes[0] == undefined) { //can't test == []
-      return -1;
-    } else {
+    if (indexes.length) {
       return indexes[0];
+    } else {
+      return -1;
     }
   };
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, iterator) {
-    var matches = [];
+    var results = [];
     _.each(collection, function(value) {
-      if (iterator(value) == true) {
-        matches.push(value);
+      if (iterator(value) === true) {
+        results.push(value);
       }
     })
-    return matches;
+    return results;
   };
 
   // Return all elements of an array that don't pass a truth test.
@@ -106,19 +94,13 @@ var _ = { };
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
     var seen = [];
-
     _.each(array, function(value) {
       var duplicate = false;
       _.each(seen, function(existing) {
-        if (value === existing) {
-          duplicate = true;
-        }
+        if (value === existing) duplicate = true;
       })
-      if (duplicate === false) {
-        seen.push(value);
-      }
+      if (!duplicate) seen.push(value);
     })
-
     return seen;
   };
 
@@ -160,7 +142,7 @@ var _ = { };
       //[(any Array)]["sort"].call([3,2,1]) is equivalent to [3,2,1].sort()
       //call takes arg list, while apply takes arg array
       //must use object 
-      return (typeof(methodName) === "function" ? methodName : value[methodName]).call(value, args);
+      return (typeof methodName === "function" ? methodName : value[methodName]).call(value, args);
     })
   };
 
@@ -178,9 +160,8 @@ var _ = { };
   //   }, 0); // should be 6
   //
   _.reduce = function(collection, iterator, initialValue) {
-    if (arguments[2] !== undefined) { //test if init value exists
-      var total = initialValue;
-    }
+    var total;
+    if (arguments[2] !== undefined) total = initialValue;
     _.each(collection, function(value) {
       total = (total === undefined ? value : iterator(total, value));
     })
@@ -206,12 +187,11 @@ var _ = { };
     // TIP: Try re-using reduce() here.
     var iteratorExists = (arguments[1] !== undefined)
     return _.reduce(collection, function(match, item) {
-      if(match === false) {
-        return false; //if false, continues returning false until finished looping
-      }
-      return ( iteratorExists ? !!(iterator(item) == true) : !!item )
+      //if false, continue returning false until finished looping
+      if (!match) return false;
       //tests if it passes a truth test (including 1)
-    }, true) //true by default
+      return ( iteratorExists ? !!(iterator(item) == true) : !!item )
+    }, true)
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
@@ -234,10 +214,8 @@ var _ = { };
     //with reduce
     var iteratorExists = (arguments[1] !== undefined)
     return _.reduce(collection, function(match, item) {
-      if(match === true) {
-        return true; //if false, continues returning false until finished looping
-      }
-      return ( iteratorExists ? (!!(iterator(item)) == true) : !!item )
+      if(match) return true;
+      return ( iteratorExists ? !!(iterator(item)) == true : !!item )
     }, false) 
   };
 
@@ -265,8 +243,8 @@ var _ = { };
     //can't use slice directly on arguments
     //it is not an array, it is an array-like object
     //http://stackoverflow.com/questions/7056925/how-does-array-prototype-slice-call-work
-    _.each(objects, function(object) { //select each obj
-      _.each(object, function(value, prop) { //select props/values from that obj
+    _.each(objects, function(object) { 
+      _.each(object, function(value, prop) { 
         obj[prop] = value;
       })
     })
@@ -279,9 +257,7 @@ var _ = { };
     var objects =  Array.prototype.slice.call(arguments, 1);
     _.each(objects, function(object) {
       _.each(object, function(value, prop) {
-        if (obj[prop] === undefined) {
-          obj[prop] = value;
-        }
+        if (obj[prop] === undefined) obj[prop] = value;
       })
     })
     return obj;
@@ -331,9 +307,8 @@ var _ = { };
     //how do I retrieve the argument from func
     return function() { 
       var arg = Array.prototype.slice.call(arguments); //*but the function directly above does not have any arguments???
-      if (results[arg] === undefined) { //test if value has already been calculated
-        results[arg] = func(arg); //if not, calculated the value
-      }
+      //test if value has already been calculated. if not, calculated the value
+      if (results[arg] === undefined) results[arg] = func(arg);
       return results[arg];
     }
   };
@@ -360,17 +335,17 @@ var _ = { };
   // Shuffle an array.
   _.shuffle = function(array) {
     var randomized = {};
-    var keys = [];
+    var randomNumbers = [];
     var shuffledArray = [];
-
-    _.each(array, function(value) { //assign random number to each value
-      randomized[Math.random()] = value;
+    //assign random number to each value
+    _.each(array, function(value) { 
+      var random = Math.random()
+      randomized[random] = value;
+      randomNumbers.push(random);
     })
-    _.each(randomized, function(value, key) { //put keys in an array and sort
-      keys.push(key);
-    })
-    keys.sort();
-    _.each(keys, function(key) { //find the associated values
+    randomNumbers.sort(function(a,b){return a-b;});
+    //find the associated values
+    _.each(randomNumbers, function(key) { 
       shuffledArray.push(randomized[key]);
     })
     return shuffledArray;
@@ -477,7 +452,6 @@ var _ = { };
         })
       })
     })
-    console.log(originalArray);
     return originalArray;
   };
 
