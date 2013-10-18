@@ -59,22 +59,17 @@ var _ = { };
     var indexes = [];
     _.each(array, function(value, index) {
       if (value === target) indexes.push(index);
-    })
-    if (indexes.length) {
-      return indexes[0];
-    } else {
-      return -1;
-    }
+    });
+    if (indexes.length) return indexes[0];
+    return -1;
   };
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, iterator) {
     var results = [];
     _.each(collection, function(value) {
-      if (iterator(value) === true) {
-        results.push(value);
-      }
-    })
+      if (iterator(value)) results.push(value);
+    });
     return results;
   };
 
@@ -94,13 +89,14 @@ var _ = { };
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
     var seen = [];
+    var duplicate;
     _.each(array, function(value) {
-      var duplicate = false;
+      duplicate = false;
       _.each(seen, function(existing) {
         if (value === existing) duplicate = true;
-      })
+      });
       if (!duplicate) seen.push(value);
-    })
+    });
     return seen;
   };
 
@@ -112,7 +108,7 @@ var _ = { };
     var results = [];
     _.each(array, function(value, key) {
       results.push(iterator(value, key));
-    })
+    });
     return results;
   };
 
@@ -143,7 +139,7 @@ var _ = { };
       //call takes arg list, while apply takes arg array
       //must use object 
       return (typeof methodName === "function" ? methodName : value[methodName]).call(value, args);
-    })
+    });
   };
 
   // Reduces an array or object to a single value by repetitively calling
@@ -164,7 +160,7 @@ var _ = { };
     if (arguments[2] !== undefined) total = initialValue;
     _.each(collection, function(value) {
       total = (total === undefined ? value : iterator(total, value));
-    })
+    });
     return total;
   };
 
@@ -174,9 +170,7 @@ var _ = { };
     // terms of reduce(). Here's a freebie to demonstrate!
     // was found is "total", it changes to true once the item is found and breaks out of the function, starts as false
     return _.reduce(collection, function(wasFound, item) {
-      if(wasFound) {
-        return true;
-      }
+      if (wasFound) return true;
       return item === target;
     }, false);
   };
@@ -191,7 +185,7 @@ var _ = { };
       if (!match) return false;
       //tests if it passes a truth test (including 1)
       return ( iteratorExists ? !!(iterator(item) == true) : !!item )
-    }, true)
+    }, true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
@@ -214,9 +208,9 @@ var _ = { };
     //with reduce
     var iteratorExists = (arguments[1] !== undefined)
     return _.reduce(collection, function(match, item) {
-      if(match) return true;
+      if (match) return true;
       return ( iteratorExists ? !!(iterator(item)) == true : !!item )
-    }, false) 
+    }, false);
   };
 
 
@@ -246,8 +240,8 @@ var _ = { };
     _.each(objects, function(object) { 
       _.each(object, function(value, prop) { 
         obj[prop] = value;
-      })
-    })
+      });
+    });
     return obj;
   };
 
@@ -258,8 +252,8 @@ var _ = { };
     _.each(objects, function(object) {
       _.each(object, function(value, prop) {
         if (obj[prop] === undefined) obj[prop] = value;
-      })
-    })
+      });
+    });
     return obj;
   };
 
@@ -342,12 +336,12 @@ var _ = { };
       var random = Math.random()
       randomized[random] = value;
       randomNumbers.push(random);
-    })
+    });
     randomNumbers.sort(function(a,b){return a-b;});
     //find the associated values
     _.each(randomNumbers, function(key) { 
       shuffledArray.push(randomized[key]);
-    })
+    });
     return shuffledArray;
   };
 
@@ -373,7 +367,7 @@ var _ = { };
       iteratorResults.push(result);
       if (!resultHash[result]) resultHash[result] = [];
       resultHash[result].push(value);
-    })
+    });
 
     //sort the unique iteratorResults
     iteratorResults = _.uniq(iteratorResults).sort(function(a,b){return a-b;});
@@ -383,8 +377,8 @@ var _ = { };
     _.each(iteratorResults, function(result) {
       _.each(resultHash[result], function(value) {
         sortedCollection.push(value);
-      })
-    })
+      });
+    });
 
     return sortedCollection;
   };
@@ -433,9 +427,9 @@ var _ = { };
       seenValues = _.filter(seenValues, function(seenValue) {
         return _.some(comparisonArray, function(comparisonValue) {
           return seenValue === comparisonValue;
-        })
-      })
-    })
+        });
+      });
+    });
     return seenValues;
   };
 
@@ -449,9 +443,9 @@ var _ = { };
       originalArray = _.filter(originalArray, function(originalValue) {
         return _.every(comparisonArray, function(comparisonValue) {
           return originalValue !== comparisonValue;
-        })
-      })
-    })
+        });
+      });
+    });
     return originalArray;
   };
 
