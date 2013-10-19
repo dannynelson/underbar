@@ -16,24 +16,16 @@ var _ = { };
   // Return an array of the first n elements of an array. If n is undefined,
   // return just the first element.
   _.first = function(array, n) {
-    var result = [];
     if (n === undefined) return array[0];
-    for (var i = 0; i < n && i < array.length; i++) {
-      result.push(array[i]);
-    } 
-    return result;
+    return array.slice(0, n);
   };
 
   // Like first, but for the last elements. If n is undefined, return just the
   // last element.
   _.last = function(array, n) {
-    var result = [];
-    var last = array.length - 1
-    if (n === undefined) return array[last];
-    for (var i = last; i > (last - n) && i >= 0; i--) {
-      result.push(array[i]);
-    }
-    return result.reverse();
+    array = array.reverse();
+    if (n === undefined) return array[0];
+    return array.slice(0, n).reverse();
   };
 
   // Call iterator(value, key, collection) for each element of collection.
@@ -56,11 +48,10 @@ var _ = { };
     // TIP: Here's an example of a function that needs to iterate, which we've
     // implemented for you. Instead of using a standard `for` loop, though,
     // it uses the iteration helper `each`, which you will need to write.
-    var indexes = [];
-    _.each(array, function(value, index) {
-      if (value === target) indexes.push(index);
-    });
-    if (indexes.length) return indexes[0];
+    //looks cleaner without the each function
+    for (var i = 0; i < array.length; i++) {
+      if (array[i] === target) return i;
+    }
     return -1;
   };
 
@@ -88,16 +79,11 @@ var _ = { };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
-    var seen = [];
-    var duplicate;
+    var unique = [];
     _.each(array, function(value) {
-      duplicate = false;
-      _.each(seen, function(existing) {
-        if (value === existing) duplicate = true;
-      });
-      if (!duplicate) seen.push(value);
+      if (_.indexOf(unique, value) === -1) unique.push(value);
     });
-    return seen;
+    return unique;
   };
 
   // Return the results of applying an iterator to each element.
