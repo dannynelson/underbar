@@ -446,6 +446,30 @@ var _ = { };
   //
   // See the Underbar readme for details.
   _.throttle = function(func, wait) {
+    var queue = 0;
+    var firstInQueue = true;
+    var result;
+
+    var callFunction = function() {
+      queue--;
+      setTimeout(testNextInQueue, wait);
+      result = func();
+    }
+
+    var testNextInQueue = function() {
+      if (queue > 0) callFunction();
+      if (queue === 0) firstInQueue = true;
+    }
+
+    return function() {
+      queue++;
+      if (firstInQueue) {
+        firstInQueue = false;
+        callFunction();
+      }
+      // if function cannot be called yet, returns previous value
+      return result;
+    }
   };
 
 }).call(this);

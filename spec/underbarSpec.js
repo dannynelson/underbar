@@ -551,7 +551,7 @@ describe("throttle", function() {
     var incr = function() {
       return ++counter;
     };
-    var throttledIncr = _.throttle(incr, 64);
+    var throttledIncr = _.throttle(incr, 64); //increments every 64 milliseconds
     var results = [];
     var saveResult = function() {
       results.push(throttledIncr());
